@@ -4,13 +4,7 @@ CREATE USER 'test'@'%' IDENTIFIED BY 'password';
 GRANT ALL PRIVILEGES ON *.* TO 'test'@'%';
 FLUSH PRIVILEGES;
 use test;
-CREATE TABLE stocks (
+CREATE TABLE hoges (
     id SERIAL UNIQUE,
     name text
-);
-
-CREATE TABLE sales (
-    id SERIAL UNIQUE,
-    name text,
-    price int
 );

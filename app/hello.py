@@ -21,14 +21,14 @@ def secret():
 
 @app.route('/v1/hoge', methods= ['get'])
 def getAllAmount():
-    query = "SELECT DISTINCT name from hoge"
+    query = "SELECT DISTINCT name from hoges"
     with conn.cursor(MySQLdb.cursors.DictCursor) as cursor:
         cursor.execute(query)
         data = cursor.fetchall()
     send_data = {}
     for i in data:
         name = i["name"]
-        query = "SELECT COUNT( * ) from hoge WHERE name = '" +  name + "';"
+        query = "SELECT COUNT( * ) from hoges WHERE name = '" +  name + "';"
         with conn.cursor(MySQLdb.cursors.DictCursor) as cursor:
             cursor.execute(query)
             data = cursor.fetchone()
