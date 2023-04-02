@@ -1,38 +1,47 @@
 from flask import Flask
 from flask import request
-# from sqlalchemy import create_engine
-# from sqlalchemy.sql import text
-# from sqlalchemy.orm import sessionmaker 
-import MySQLdb
+from flask import Flask,render_template,request,redirect
+from sqlalchemy.engine.url import URL
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker 
+from sqlalchemy.sql import text
 # import pymysql
 import json
 
+url = URL.create(
+    drivername='mysql+mysqldb',
+    username='test',
+    password='password',
+    host='db',
+    database='test',
+    query={"charset": "utf8"},
+)
 app = Flask(__name__)
-# engine = create_engine('mysql://test:password@db:3306/test')
-# session = sessionmaker(bind=engine)()
-conn = MySQLdb.connect(user='test',
-                       password='password',
-                       host='db',
-                       db='test')
+engine = create_engine(url, pool_recycle=10)
+session = sessionmaker(bind=engine)()
+
+@app.route('/')
+def index():
+    return("hoge")
 
 @app.route('/hoge')
-def secret():
-    return 'hoge'
-
-@app.route('/v1/hoge', methods= ['get'])
-def getAllAmount():
-    query = "SELECT DISTINCT name from hoges"
-    with conn.cursor(MySQLdb.cursors.DictCursor) as cursor:
-        cursor.execute(query)
-        data = cursor.fetchall()
-    send_data = {}
-    for i in data:
-        name = i["name"]
-        query = "SELECT COUNT( * ) from hoges WHERE name = '" +  name + "';"
-        with conn.cursor(MySQLdb.cursors.DictCursor) as cursor:
-            cursor.execute(query)
-            data = cursor.fetchone()
+def hoge():
+    t = text("select * from hoges")
+    hoges = session.execute(t)
+    send_data = []
+    for hoge in hoges:
+        send_data.append({
+            "id": hoge.id,
+            "name": hoge.name
+        })
     return json.dumps(send_data, indent=4)
+
+@app.route('/test')
+def test():
+    t = text("insert hoges values (2, 'test')")
+    hoges = session.execute(t)
+    session.commit()
+    return("hoge")
 
 
 if __name__ == '__main__':

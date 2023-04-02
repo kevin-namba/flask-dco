@@ -6,12 +6,17 @@ services:
     build: .
     container_name: flask_apache_test
     hostname: flask_apache_test
+    entrypoint: >
+      /bin/sh -c "
+      apachectl -D FOREGROUND
+      "
     tty: true
     volumes:
       - ./app:/app
       - ./conf/000-default.conf:/etc/apache2/sites-available/000-default.conf
     ports:
       - 18080:80
+      - 15000:5000
   db:
     build:
       context: .

@@ -25,4 +25,4 @@ RUN pip install sqlalchemy
 RUN pip install pip install mysqlclient
 RUN ln -s /etc/apache2/mods-available/auth_digest.load /etc/apache2/mods-enabled/
 
-CMD ["apachectl", "-D", "FOREGROUND"]
+# CMD ["apachectl", "-D", "FOREGROUND"]
