@@ -36,9 +36,9 @@ def hoge():
         })
     return json.dumps(send_data, indent=4)
 
-@app.route('/test')
-def test():
-    t = text("insert hoges values (2, 'test')")
+@app.route('/test/<name>')
+def test(name):
+    t = text("insert hoges (name) values ('{}')".format(name))
     hoges = session.execute(t)
     session.commit()
     return("hoge")
