@@ -24,25 +24,22 @@ session = sessionmaker(bind=engine)()
 def index():
     return("hoge")
 
-@app.route('/hoge')
-def hoge():
-    t = text("select * from hoges")
-    hoges = session.execute(t)
+@app.route('/template')
+def template():
+    hoges = ["fuga","piyo"]
+    return render_template("template.html",tests=hoges)
+
+@app.route('/contents')
+def get_contents():
+    t = text("select * from contents")
+    contents = session.execute(t)
     send_data = []
-    for hoge in hoges:
+    for content in contents:
         send_data.append({
-            "id": hoge.id,
-            "name": hoge.name
+            "id": content.id,
+            "text": content.text
         })
     return json.dumps(send_data, indent=4)
-
-@app.route('/test/<name>')
-def test(name):
-    t = text("insert hoges (name) values ('{}')".format(name))
-    hoges = session.execute(t)
-    session.commit()
-    return("hoge")
-
 
 if __name__ == '__main__':
     app.run(debug=True)
